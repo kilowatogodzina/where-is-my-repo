@@ -29,15 +29,15 @@ const CustomButton = styled.button`
 
 class SearchComponent extends React.Component {
   render() {
-    let { value, onChange, onSearch } = this.props;
+    let { onSearch, onKeyPressHandler } = this.props;
 
     return (
       <SearchWrapper>
         <CustomInput
           name='search'
           placeholder='Repository name...'
-          value={value}
-          onChange={(event) => onChange(event)}
+          onKeyPress={(event) => onKeyPressHandler(event)}
+          autoFocus
         />
 
         <CustomButton onClick={onSearch}>Search</CustomButton>

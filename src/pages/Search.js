@@ -41,12 +41,6 @@ class Search extends React.Component {
     };
   }
 
-  setSearch = (event) => {
-    let query = event.target.value;
-
-    this.setState({ search: query });
-  };
-
   search = () => {
     this.setState({
       isLoading: true,
@@ -83,9 +77,18 @@ class Search extends React.Component {
     });
   };
 
+  onKeyPressHandler = (event) => {
+    let query = event.target.value;
+
+    if (event.key === 'Enter') {
+      this.search();
+    } else {
+      this.setState({ search: query });
+    }
+  }
+
   render() {
     let {
-      search,
       results,
       isLoading,
       chosenResult,
@@ -99,9 +102,8 @@ class Search extends React.Component {
           <Header>Looking for some repositories?</Header>
 
           <SearchComponent
-            value={search}
-            onChange={(event) => this.setSearch(event)}
             onSearch={(event) => this.search(event)}
+            onKeyPressHandler = {(event) => this.onKeyPressHandler(event)}
           />
 
           {isLoading && <Loader />}
