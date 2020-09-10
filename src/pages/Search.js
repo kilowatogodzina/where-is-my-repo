@@ -2,6 +2,9 @@ import React from 'react';
 import { getRepos } from '../services/axios';
 import Results from '../components/ResultComponent';
 import Details from '../components/DetailsComponent';
+import Loader from '../components/LoaderComponent';
+import SearchComponent from '../components/SearchComponent';
+
 import styled from 'styled-components';
 
 const MainWrapper = styled.div`
@@ -10,6 +13,19 @@ const MainWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+`;
+
+const Header = styled.h1`
+  text-align: center;
+`;
+
+const Error = styled.div`
+  text-align: center;
+  margin: 1rem;
+  color: red;
 `;
 
 class Search extends React.Component {
@@ -21,6 +37,7 @@ class Search extends React.Component {
       isLoading: false,
       chosenResult: {},
       isPopupOpen: false,
+      error: '',
     };
   }
 
@@ -32,15 +49,24 @@ class Search extends React.Component {
 
   search = () => {
     this.setState({
-      isLoading: true
-    })
-
-    getRepos(this.state.search).then((result) => {
-      this.setState({
-        results: result.items,
-        isLoading: false,
-      });
+      isLoading: true,
+      results: [],
+      error: '',
     });
+
+    getRepos(this.state.search)
+      .then((result) => {
+        this.setState({
+          results: result.items,
+          isLoading: false,
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          error: error.response.data.message,
+          isLoading: false,
+        });
+      });
   };
 
   onChooseResult = (result) => {
@@ -48,33 +74,48 @@ class Search extends React.Component {
       chosenResult: result,
       isPopupOpen: true,
     });
-  }
+  };
 
   onClosePopup = () => {
     this.setState({
       chosenResult: {},
       isPopupOpen: false,
     });
-  }
+  };
 
   render() {
-    let { search, results, isLoading, chosenResult, isPopupOpen } = this.state;
+    let {
+      search,
+      results,
+      isLoading,
+      chosenResult,
+      isPopupOpen,
+      error,
+    } = this.state;
 
     return (
       <>
         <MainWrapper>
-        <h1>Where is my repo?</h1>
-        <input value={search} onChange={this.setSearch}></input>
-        <button onClick={this.search}>Search</button>
+          <Header>Looking for some repositories?</Header>
 
-        {isLoading && <div>Ładowanie...</div>}
+          <SearchComponent
+            value={search}
+            onChange={(event) => this.setSearch(event)}
+            onSearch={(event) => this.search(event)}
+          />
 
-        <Results results={results} onChooseResult={(result) => this.onChooseResult(result)}/>
+          {isLoading && <Loader />}
 
-        {isPopupOpen &&
-        <Details result={chosenResult} onClosePopup={this.onClosePopup} />
-        }
+          {error && <Error>{error}</Error>}
 
+          <Results
+            results={results}
+            onChooseResult={(result) => this.onChooseResult(result)}
+          />
+
+          {isPopupOpen && (
+            <Details result={chosenResult} onClosePopup={this.onClosePopup} />
+          )}
         </MainWrapper>
       </>
     );
