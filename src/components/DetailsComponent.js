@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import SingleResult from '../components/SingleResultComponent';
 
 const PopupWrapper = styled.div`
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
@@ -14,17 +15,28 @@ const PopupWrapper = styled.div`
 `;
 
 const PopupContent = styled.div`
-  width: 700px;
-  height: 400px;
-  max-width: 100%;
+  width: 450px;
+  max-width: 80%;
   max-height: 80%;
   background-color: white;
-  padding: 1rem;
+  padding: 1.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  border-radius: 25px;
+  border-radius: 10px;
+`;
+
+const PopupButton = styled.button`
+  background: #1ba98f;
+  color: white;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  width: 150px;
+  margin: 1rem 0;
+  min-height: 30px;
+  border-radius: 5px;
 `;
 
 class Details extends React.Component {
@@ -35,8 +47,9 @@ class Details extends React.Component {
       <>
         <PopupWrapper>
           <PopupContent>
-            {result.name} 
-            <button onClick={onClosePopup}>Finish!</button>
+            <SingleResult result={result} isFromDetails={true} />
+
+            <PopupButton onClick={onClosePopup}>Close</PopupButton>
           </PopupContent>
         </PopupWrapper>
       </>

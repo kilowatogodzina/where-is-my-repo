@@ -2,7 +2,7 @@ import React from 'react';
 import { getRepos } from '../services/axios';
 import Results from '../components/ResultComponent';
 import Details from '../components/DetailsComponent';
-import Loader from '../components/LoaderComponent';
+import Loader from '../components/svg/LoaderComponent';
 import SearchComponent from '../components/SearchComponent';
 
 import styled from 'styled-components';
@@ -16,6 +16,7 @@ const MainWrapper = styled.div`
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
+  font-family: 'Sen', sans-serif;
 `;
 
 const Header = styled.h1`
@@ -77,7 +78,7 @@ class Search extends React.Component {
     });
   };
 
-  onKeyPressHandler = (event) => {
+  onKeyUpHandler = (event) => {
     let query = event.target.value;
 
     if (event.key === 'Enter') {
@@ -103,7 +104,7 @@ class Search extends React.Component {
 
           <SearchComponent
             onSearch={(event) => this.search(event)}
-            onKeyPressHandler = {(event) => this.onKeyPressHandler(event)}
+            onKeyUpHandler = {(event) => this.onKeyUpHandler(event)}
           />
 
           {isLoading && <Loader />}
