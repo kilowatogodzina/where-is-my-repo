@@ -23,6 +23,10 @@ const Header = styled.h1`
   text-align: center;
 `;
 
+const Subheader = styled.h2`
+  text-align: center;
+`;
+
 const Error = styled.div`
   text-align: center;
   margin: 1rem;
@@ -86,25 +90,22 @@ class Search extends React.Component {
     } else {
       this.setState({ search: query });
     }
-  }
+  };
 
   render() {
-    let {
-      results,
-      isLoading,
-      chosenResult,
-      isPopupOpen,
-      error,
-    } = this.state;
+    let { results, isLoading, chosenResult, isPopupOpen, error } = this.state;
 
     return (
       <>
         <MainWrapper>
           <Header>Looking for some repositories?</Header>
+          <Subheader>
+            Type in your query and press 'Search' or enter key!
+          </Subheader>
 
           <SearchComponent
             onSearch={(event) => this.search(event)}
-            onKeyUpHandler = {(event) => this.onKeyUpHandler(event)}
+            onKeyUpHandler={(event) => this.onKeyUpHandler(event)}
           />
 
           {isLoading && <Loader />}
